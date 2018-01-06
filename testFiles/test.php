@@ -8,7 +8,6 @@
 	echo "<pre>";
 	print_r(PDO::getAvailableDrivers());
 	
-	
 	$connection = sqlsrv_connect($servername, $connectionInfo);
 	
 	if(!$connection){
