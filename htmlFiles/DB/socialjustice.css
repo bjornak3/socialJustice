@@ -26,10 +26,11 @@ body{
 .searchdiv{
     margin-top:15em;
 }
-
 p{
-    color: white;
     margin: 0px;
+}
+label{
+    color: white;
 }
 .searchform{
     width:45em;
@@ -75,4 +76,17 @@ p{
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+.signupdiv{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #222;
+    height: 20em;
+    width: 20em;
+    border-radius:0.3em;
+}
+.signupdiv a{
+    color: white;
 }
