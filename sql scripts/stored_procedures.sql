@@ -49,12 +49,21 @@ BEGIN
 END
 GO
 
-execute uspCreateUser 'lala'
-
 --uspCreateProfile
 IF EXISTS (SELECT * FROM sysobjects WHERE id = object_id(N'[dbo].[uspCreateProfile]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1)
 BEGIN
 DROP PROCEDURE uspCreateProfile
 END
 
-select * from users;
+CREATE PROCEDURE uspCreateProfile
+    @TwitterHandle nvarchar(50),
+	@Vorname nvarchar(50),
+	@Nachname nvarchar(50),
+	@Geschlecht char(1),
+	@Job nvarchar(50)
+AS
+    SET NOCOUNT ON; 
+	DECLARE @NewId int;
+	SELECT @NewId = FLOOR(RAND()*(9999999-1000000)+1000000);
+	INSERT INTO PROFILES VALUES (@NewId, @Vorname, @Nachname, @Geschlecht, 0, @TwitterHandle, @Job);
+GO 
