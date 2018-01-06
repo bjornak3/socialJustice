@@ -1,0 +1,72 @@
+/**************************
+Standard-Rahmen entfernt.
+ *************************/
+*{
+    margin:0;
+    padding:0;
+}
+
+/**************************
+ Gesamtes Dokument auf border-box umgestellt.
+ *************************/
+html{
+    box-sizing: border-box;
+}
+*, ::before, ::after {
+    box-sizing: inherit;
+}
+body{
+    background: darkslategray;
+}
+.contentwrapper{
+    height: 100%;
+    height: -moz-available;
+    height: -webkit-fill-available;
+}
+.searchdiv{
+    margin-top:15em;
+}
+p{
+    color: white;
+}
+.searchform{
+    width:45em;
+}
+
+.searchbar{
+    height: 3em;
+}
+.searchbutton{
+    width: auto;
+    height: 3em;
+}
+.loginform{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #9d9d9d;
+}
+.loginform p{
+    display: inline;
+    padding:1em;
+    color: #9d9d9d !important;
+}
+.loginbtn{
+    background: #222;
+    color: #9d9d9d;
+}
+.loginbtn:hover{
+    color: white;
+}
+.addnewprofilediv{
+    margin-top: 15em;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.notloggedin{
+    margin-top: 20em;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
