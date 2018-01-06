@@ -8,6 +8,9 @@
         case 'home':
             include ("search.php");
             break;
+        case 'profiles':
+            include ("profiles.php");
+            break;
         case 'addnewprofile':
             if (isset($_SESSION["Loggedin"])){
                 include ("addnewprofile.php");
