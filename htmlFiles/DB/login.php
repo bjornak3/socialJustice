@@ -26,8 +26,8 @@ if(isset($_POST["Login"])) {
         ?>
         <ul class="nav navbar-nav navbar-right">
             <form class="nav navbar-nav loginform" method="post">
-                <li><p>Username</p><input id="Username" type="text" name="Username" placeholder="username"></li>
-                <li><p>Password</p><input id="Password" type="password" name="Password" placeholder="********"></li>
+                <li><input id="Username" type="text" name="Username" placeholder="username"></li>
+                <li><input id="Password" type="password" name="Password" placeholder="********"></li>
                 <li>
                     <button class="btn loginbtn" type="button submit" name="Login"><span
                             class="glyphicon glyphicon-log-in"></span> Login
@@ -35,6 +35,7 @@ if(isset($_POST["Login"])) {
                 </li>
                 <li><a href="signup.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
             </form>
+
         </ul>
 
         <?php
@@ -46,8 +47,8 @@ if(isset($_POST["Login"])) {
     {
 
         ?>
-        <ul class="nav navbar-nav navbar-right">
-            <form class="nav navbar-nav loginform" method="post">
+        <ul class="nav navbar-nav navbar-right ">
+            <form class="nav navbar-nav loginform logoutdiv" method="post">
                 <li><p>Logged in as <?php
                             echo $_SESSION["Loggedin"];
                         ?></p></li>
