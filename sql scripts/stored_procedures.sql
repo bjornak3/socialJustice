@@ -11,7 +11,7 @@ CREATE PROCEDURE uspGetProfileInfo
     @TwitterHandle nvarchar(50)
 AS
     SET NOCOUNT ON;  
-    SELECT VORNAME, NACHNAME, GESCHLECHT
+    SELECT VORNAME, NACHNAME, GESCHLECHT, JOB
     FROM PROFILES
     WHERE TWITTER_HANDLE = @TwitterHandle;
 GO  
@@ -67,3 +67,18 @@ AS
 	SELECT @NewId = FLOOR(RAND()*(9999999-1000000)+1000000);
 	INSERT INTO PROFILES VALUES (@NewId, @Vorname, @Nachname, @Geschlecht, 0, @TwitterHandle, @Job);
 GO 
+
+--getPostComments
+IF EXISTS (SELECT * FROM sysobjects WHERE id = object_id(N'[dbo].[getPostComments]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1)
+BEGIN
+DROP PROCEDURE uspCreateProfile
+END
+
+CREATE PROCEDURE getPostComments
+    @PostId integer
+AS
+    SET NOCOUNT ON; 
+	Select TEXT 
+	FROM COMMENTS
+	WHERE FK_POST = @PostId;
+GO
