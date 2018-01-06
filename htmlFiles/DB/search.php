@@ -1,7 +1,11 @@
 <div class="searchdiv col-md-6 col-md-offset-3">
     <div>
+<<<<<<< HEAD
+        <label>search for Profiles by</label>
+=======
         <form  method="POST">
         <p>search for Profiles by</p>
+>>>>>>> ba87bbe87a5df861dd64441dbc3f0cf035278eda
         <div class="input-group searchform">
             <div class="input-group-addon""><span>twitterhandles</span>
         </div>
@@ -21,7 +25,7 @@
         } ?>
     </div>
     <div style="padding-top: 2em;">
-        <p>search for Posts by</p>
+        <label>search for Posts by</label>
         <div class="input-group searchform">
             <div class="input-group-addon""><span>tags</span></div>
         <input type="text" class="form-control searchbar" placeholder="type to search...">
