@@ -7,3 +7,4 @@ hate_lvl;
 
 
 select * from getProfileInformation;
+

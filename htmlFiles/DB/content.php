@@ -11,7 +11,7 @@
         case 'profiles':
             ?>
             <div>
-                Profiles
+                Profiles coming here
             </div>
             <?php
             break;
