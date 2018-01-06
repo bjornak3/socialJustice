@@ -11,6 +11,9 @@
         case 'profiles':
             include ("profiles.php");
             break;
+        case 'posts':
+            include ("posts.php");
+            break;
         case 'addnewprofile':
             if (isset($_SESSION["Loggedin"])){
                 include ("addnewprofile.php");

@@ -16,6 +16,7 @@
 
     </div>
     <div style="padding-top: 2em;">
+        <form  method="POST" action="index.php?section=posts">
         <label>search for Posts by</label>
         <div class="input-group searchform">
             <div class="input-group-addon""><span>tags</span></div>
@@ -25,10 +26,6 @@
               <i class="glyphicon glyphicon-search"></i>
             </button>
         </div>
-        <?php if (isset($_POST["searchTags"]))
-        {   $tag = ($_POST["searchTags"]);
-            $getTags = "select * from POST_TAG_VIEW where TAG = '$tag'";
-            return;
-        } ?>
+        </form>
     </div>
 </div>
