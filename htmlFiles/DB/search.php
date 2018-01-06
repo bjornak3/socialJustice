@@ -1,11 +1,7 @@
 <div class="searchdiv col-md-6 col-md-offset-3">
     <div>
-<<<<<<< HEAD
-        <label>search for Profiles by</label>
-=======
         <form  method="POST">
-        <p>search for Profiles by</p>
->>>>>>> ba87bbe87a5df861dd64441dbc3f0cf035278eda
+        <label>search for Profiles by</label>
         <div class="input-group searchform">
             <div class="input-group-addon""><span>twitterhandles</span>
         </div>
@@ -20,7 +16,7 @@
         {
         $twitterHandle = ($_POST["searchTwitterHandles"]);
             $getTwitterHandles = "select * from PROFILES where TWITTER_HANDLE = '$twitterHandle'";
-            echo "<br><div> Profiles here </div>";
+            echo "<div> Profiles here </div>";
             return;
         } ?>
     </div>
