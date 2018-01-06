@@ -31,6 +31,7 @@
                         <button type="submit" class="btn btn-default">Sign Up!</button>
                     </div>
                 </div>
+                <!-- if username vergeben error-->
 
 
             <?php
