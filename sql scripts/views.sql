@@ -8,3 +8,10 @@ hate_lvl;
 
 select * from getProfileInformation;
 
+
+alter view getPostsByTag as
+select tags.name, posts.PATH from posts join post_tag
+on posts.id = post_tag.FK_POST
+join tags on tags.ID = POST_TAG.FK_TAG;
+
+select * from getPostsByTag;

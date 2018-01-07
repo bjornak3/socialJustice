@@ -82,3 +82,21 @@ AS
 	FROM COMMENTS
 	WHERE FK_POST = @PostId;
 GO
+
+
+CREATE PROCEDURE signUp 
+	@username varchar(50), @password varchar(50)
+as
+begin
+	DECLARE @NewId int;
+	SELECT @NewId = FLOOR(RAND()*(9999999-1000000)+1000000);
+	insert into USERS (id, USERNAME,SCORE, [password]) values (@NewId, @username, 0, @password); 
+end
+
+exec signUp 'test','test';
+
+select * from USERS where USERNAME = 'miel';
+
+select * from PROFILES
+select * from getProfileInformation;
+select * from getProfileInformation where TWITTER_HANDLE = 'realdonaldtrump';
