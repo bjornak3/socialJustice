@@ -6,7 +6,7 @@
 	include_once('../configFiles/connectData.php');
 	// check if the sql driver is loaded
 	echo "<pre>";
-	print_r(PDO::getAvailableDrivers());
+	//print_r(PDO::getAvailableDrivers());
 	
 	$connection = sqlsrv_connect($servername, $connectionInfo);
 	

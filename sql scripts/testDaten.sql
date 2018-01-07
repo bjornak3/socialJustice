@@ -40,14 +40,14 @@ select * from PROFILES;
 
 --USERS examples
 insert into USERS VALUES
-	(0, 'FeJo', 0, 'fejo'),
-	(2, 'Bjorna', 0, 'bjorna'),
-	(3, 'Andrè', 0, 'andre');
+	(0, 'FeJo', 'fejo',0),
+	(2, 'Bjorna','bjorna',0),
+	(3, 'Andrè', 'andre',0);
 
 alter table posts alter column path varchar(255);
 --POSTS examples
 insert into POSTS VALUES
-	(13241, 69, 0, 'https://twitter.com/realDonaldTrump/status/949498795074736129');
+	(13241, 69, 0, 'https://twitter.com/realDonaldTrump/status/949498795074736129',0,0);
 select * from POSTS;
 
 
@@ -58,11 +58,16 @@ insert into POST_TAG VALUES
 
 --POSTS examples
 insert into POSTS VALUES
-	(13241, 69, 0, 'https://twitter.com/realDonaldTrump/status/949498795074736129'),
-	(5555, 69, 0, 'https://twitter.com/realDonaldTrump/status/949303089416294401');
+	(5555, 69, 0, 'https://twitter.com/realDonaldTrump/status/949303089416294401',0,0);
 select * from POSTS;
 
 --POST_TAG
 insert into POST_TAG VALUES
 	(5555, 3),
 	(5555, 102);
+
+--Kommentare
+insert into COMMENTS VALUES
+	(55552, 5555, 2, 'AW MA GAWD! what a praaack!'),
+	(55551, 5555, 2, 'ohoho!'),
+	(88888, 13241, 1, 'Du solltest mal seine Mutter sehen lol');

@@ -283,24 +283,28 @@ ALTER TABLE [dbo].[POSTS]
 
 GO
 
-IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_USER_SCORE'  AND sc.name=N'dbo')
-ALTER TABLE [dbo].[POSTS] DROP CONSTRAINT [POST_USER_SCORE]
+
+IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_USERS_SCORE'  AND sc.name=N'dbo')
+ALTER TABLE [dbo].[POSTS] DROP CONSTRAINT [POST_USERS_SCORE]
  GO
 
-CREATE TRIGGER POST_USER_SCORE
+CREATE TRIGGER POST_USERS_SCORE
 ON [POSTS]
-AFTER INSERT, UPDATE
+AFTER UPDATE
 AS
 UPDATE [USERS]
-SET SCORE += 1
+SET SCORE -= (SELECT deleted.SCORE FROM deleted)
+WHERE [USERS].ID = (SELECT inserted.[FK_USERS] from inserted)
+SET SCORE += (SELECT inserted.SCORE FROM inserted)
 WHERE [USERS].ID = (SELECT inserted.[FK_USERS] from inserted)
 GO
 
-IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_USER_SCORE_DELETED'  AND sc.name=N'dbo')
-ALTER TABLE [dbo].[POSTS] DROP CONSTRAINT [POST_USER_SCORE_DELETED]
+
+IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_USERS_SCORE_DELETED'  AND sc.name=N'dbo')
+ALTER TABLE [dbo].[POSTS] DROP CONSTRAINT [POST_USERS_SCORE_DELETED]
  GO
 
-CREATE TRIGGER POST_USER_SCORE_DELETED
+CREATE TRIGGER POST_USERS_SCORE_DELETED
 ON [POSTS]
 AFTER DELETE
 AS
@@ -321,11 +325,15 @@ DECLARE @LEVEL int;
 DECLARE @COUNT int;
 SELECT @COUNT = COUNT(*) FROM PROFILES as pr JOIN POSTS as po ON pr.ID = po.FK_PROFILES WHERE pr.ID = (SELECT inserted.FK_PROFILES from inserted)
 IF(@COUNT <= 5)
-	SET @LEVEL = 1;
+	SET @LEVEL = 0;
 ELSE IF(@COUNT <= 10)
+	SET @LEVEL = 1;
+ELSE IF(@COUNT <= 25)
 	SET @LEVEL = 2;
-ELSE IF(@COUNT > 10)
+ELSE IF(@COUNT <= 50)
 	SET @LEVEL = 3;
+ELSE 
+	SET @LEVEL = 4;
 UPDATE PROFILES
 SET FK_HATE_ID = @LEVEL
 WHERE [PROFILES].ID = (SELECT inserted.FK_PROFILES from inserted)
@@ -386,7 +394,11 @@ CREATE TABLE
 (
    [ID] numeric(38, 0)  NOT NULL,
    [FK_POST] numeric(38, 0)  NOT NULL,
+<<<<<<< HEAD
    [FK_USER] numeric(38, 0)  NOT NULL,
+=======
+   [FK_USERS] numeric(38, 0)  NOT NULL,
+>>>>>>> b9ade95a18f7a6552563e4f30ff50c2632d6fde8
    [TEXT] varchar(140) NOT NULL
 )
 GO
@@ -415,6 +427,7 @@ ALTER TABLE [dbo].[COMMENTS]
 
 GO
 
+<<<<<<< HEAD
 IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'COMMENT_USER_FK'  AND sc.name=N'dbo'  AND type in (N'F'))
 ALTER TABLE [dbo].[COMMENTS] DROP CONSTRAINT [COMMENT_USER_FK]
  GO
@@ -423,6 +436,16 @@ ALTER TABLE [dbo].[COMMENTS]
  ADD CONSTRAINT [COMMENT_USER_FK]
  FOREIGN KEY 
    ([FK_USER])
+=======
+IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'COMMENT_USERS_FK'  AND sc.name=N'dbo'  AND type in (N'F'))
+ALTER TABLE [dbo].[COMMENTS] DROP CONSTRAINT [COMMENT_USERS_FK]
+ GO
+
+ALTER TABLE [dbo].[COMMENTS]
+ ADD CONSTRAINT [COMMENT_USERS_FK]
+ FOREIGN KEY 
+   ([FK_USERS])
+>>>>>>> b9ade95a18f7a6552563e4f30ff50c2632d6fde8
  REFERENCES 
    [dbo].[USERS]     ([ID])
     ON DELETE NO ACTION
