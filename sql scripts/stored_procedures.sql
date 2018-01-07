@@ -100,3 +100,25 @@ select * from USERS where USERNAME = 'miel';
 select * from PROFILES
 select * from getProfileInformation;
 select * from getProfileInformation where TWITTER_HANDLE = 'realdonaldtrump';
+
+
+alter procedure uspLoginUsr
+@username varchar(50),
+@password varchar(255) output
+as 
+begin 
+select @password = PASSWORD from USERS where USERNAME = @username; 
+end
+
+
+select * from log
+alter procedure uspLogInfo
+@timestamp datetime, @username varchar(255), @action varchar(255)
+as begin
+DECLARE @NewId int;
+SELECT @NewId = FLOOR(RAND()*(9999999-1000000)+1000000);
+insert into log
+values(@NewId,@timestamp, @username, @action);
+end 
+
+execute uspLogInfo '2016-12-01 12:32:00.000', 'bjorna', 'logout';
