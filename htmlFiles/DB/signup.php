@@ -10,52 +10,60 @@
 
 <body>
 
+            <?php
+
+			$servername = "(LocalDb)\MSSQLLocalDB";
+			$connectionInfo = array("Database"=>"SocialJustice");
+			$connection = sqlsrv_connect($servername, $connectionInfo);	
+            
+			if (isset($_POST['Register']))
+            {
+			$username = ($_POST["username"]);
+			$password = md5($_POST["pwd"]);
+			
+			
+			$signUp = "execute signUp '" .$username. "','".$password."';";
+		
+			$stmt = sqlsrv_query($connection, $signUp);
+			
+           
+                if ($stmt)
+                {
+                    echo '<div style="width:50%; margin: auto;" class="alert alert-success">
+						<strong> User successfully registered. </strong>
+					</div> ';
+
+                }else {
+                  echo '<div style="width:50%; margin: auto;" class="alert alert-danger">
+					<strong>User already exists!</strong>
+				  </div>';
+                }
+			}
+            ?>
 
 <div class="contentwrapper">
     <div class="signupdiv">
             <form class="form-horizontal" method="post">
                 <div class="form-group">
-                    <label for="email">What do you want to be called?</label>
+                    <label for="username">What do you want to be called?</label>
                     <div>
-                        <input type="text" class="form-control" placeholder="Username">
+                        <input type="text" name="username" class="form-control" placeholder="Username">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="pwd">Please choose a Password</label>
                     <div>
-                        <input type="password" class="form-control" id="pwd" placeholder="Enter password">
+                        <input type="password" class="form-control" name="pwd" placeholder="Enter password">
                     </div>
                 </div>
                 <div class="form-group" style="float:left;">
                     <div>
-                        <button type="submit" class="btn btn-default">Sign Up!</button>
+                        <button type="submit" name="Register" class="btn btn-default">Sign Up!</button>
                     </div>
                 </div>
                 <!-- if username vergeben error-->
 
 
-            <?php
-
-            if (isset($_POST['Register']))
-            {
-                $pwd_hash = md5($_POST['Password']);
-
-                $sql = "INSERT INTO user (username, pwd, vorname, nachname, email, is_admin, is_ldap) VALUES
-                                          ('".$_POST['Username']."','".$pwd_hash."','".$_POST['Surname']."','".$_POST['LastName']."','".$_POST['Email']."',false,false)";
-                $registered = $con->query($sql);
-            }
-
-            if (isset ($_POST['Register']))
-            {
-                if ($registered)
-                {
-                    echo "User was registered succesfully!";
-
-                }else {
-                    echo "User already exists.";
-                }
-            }
-            ?>
                 <div class="form-group" style="float:right;">
             <a href="index.php">Main Page</a>
                 </div>
