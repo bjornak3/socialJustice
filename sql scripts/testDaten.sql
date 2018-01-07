@@ -49,3 +49,20 @@ alter table posts alter column path varchar(255);
 insert into POSTS VALUES
 	(13241, 69, 0, 'https://twitter.com/realDonaldTrump/status/949498795074736129');
 select * from POSTS;
+
+
+--POST_TAG
+insert into POST_TAG VALUES
+	(13241, 3),
+	(13241, 103);
+
+--POSTS examples
+insert into POSTS VALUES
+	(13241, 69, 0, 'https://twitter.com/realDonaldTrump/status/949498795074736129'),
+	(5555, 69, 0, 'https://twitter.com/realDonaldTrump/status/949303089416294401');
+select * from POSTS;
+
+--POST_TAG
+insert into POST_TAG VALUES
+	(5555, 3),
+	(5555, 102);
