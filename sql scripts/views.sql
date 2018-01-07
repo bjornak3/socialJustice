@@ -17,3 +17,10 @@ on posts.id = post_tag.FK_POST
 join tags on tags.ID = POST_TAG.FK_TAG;
 
 select * from getPostsByTag;
+
+create view getPostsByTwitterHandle as
+select posts.PATH, PROFILES.TWITTER_HANDLE from posts 
+join PROFILES on PROFILES.ID = posts.FK_PROFILES; 
+
+select * from getPostsByTwitterHandle where TWITTER_HANDLE = 'realdonaldtrump';
+select posts.PATH, PROFILES.TWITTER_HANDLE from posts join PROFILES on PROFILES.ID = posts.FK_PROFILES where TWITTER_HANDLE = 'realdonaldtrump'
