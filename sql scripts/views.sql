@@ -7,7 +7,9 @@ hate_lvl;
 
 
 select * from getProfileInformation;
-
+select profiles.vorname, profiles.NACHNAME, profiles.GESCHLECHT, PROFILES.job, HATE_LVL.NAME
+from profiles, HATE_LVL
+where TWITTER_HANDLE = 'realdonaldtrump' and HATE_LVL.ID = (select PROFILES.FK_HATE_ID from PROFILES where TWITTER_HANDLE = 'realdonaldtrump');
 
 alter view getPostsByTag as
 select tags.name, posts.PATH from posts join post_tag
