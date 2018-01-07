@@ -49,3 +49,8 @@ insert into USERS VALUES
 insert into POSTS VALUES
 	(13241, 69, 0, 'https://twitter.com/realDonaldTrump/status/949498795074736129');
 select * from POSTS;
+
+--POST_TAG
+insert into POST_TAG VALUES
+	(13241, 3),
+	(13241, 103);
