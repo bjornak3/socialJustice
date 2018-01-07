@@ -49,7 +49,7 @@ CREATE TABLE
    [VORNAME] varchar(50)  NULL,
    [NACHNAME] varchar(50)  NULL,
    [GESCHLECHT] char(1)  NULL,
-   [FK_HATE_ID] integer NOT NULL,
+   [FK_HATE_ID] numeric(38, 0) NOT NULL,
    [TWITTER_HANDLE] varchar(50)  NOT NULL UNIQUE,
    [JOB] varchar(50)  NULL
 )
@@ -71,6 +71,15 @@ ALTER TABLE [dbo].[PROFILES] DROP CONSTRAINT [PROFILES_GESCHLECHT]
 ALTER TABLE [dbo].[PROFILES]
  ADD CONSTRAINT [PROFILES_GESCHLECHT]
  CHECK (GESCHLECHT IN ( 'w', 'm' ))
+
+GO
+
+IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'UNIQUE_TWITTER_HANDLE' AND type in (N'PK'))
+ALTER TABLE [PROFILES] DROP CONSTRAINT [UNIQUE_TWITTER_HANDLE]
+ GO
+ALTER TABLE [PROFILES]
+ ADD CONSTRAINT [UNIQUE_TWITTER_HANDLE]
+	UNIQUE ([TWITTER_HANDLE])
 
 GO
 
@@ -171,6 +180,7 @@ CREATE TABLE
 (
    [ID] numeric(38, 0)  NOT NULL,
    [USERNAME] varchar(50)  NOT NULL UNIQUE,
+   [PASSWORD] varchar(50)  NOT NULL,
    [SCORE] numeric(38, 0)  NOT NULL,
 )
 GO
@@ -229,7 +239,9 @@ CREATE TABLE
    [ID] numeric(38, 0)  NOT NULL,
    [FK_PROFILES] numeric(38, 0)  NOT NULL,
    [FK_USERS] numeric(38, 0)  NOT NULL,
-   [PATH] varchar(255)  NOT NULL
+   [PATH] varchar(255)  NOT NULL,
+   [REPORT_COUNT] numeric(38, 0)  NOT NULL,
+   [SCORE] numeric(38, 0)  NOT NULL,
 )
 GO
 IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_PK' AND type in (N'PK'))
@@ -269,6 +281,66 @@ ALTER TABLE [dbo].[POSTS]
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 
+GO
+
+IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_USER_SCORE'  AND sc.name=N'dbo')
+ALTER TABLE [dbo].[POSTS] DROP CONSTRAINT [POST_USER_SCORE]
+ GO
+
+CREATE TRIGGER POST_USER_SCORE
+ON [POSTS]
+AFTER INSERT, UPDATE
+AS
+UPDATE [USERS]
+SET SCORE += 1
+WHERE [USERS].ID = (SELECT inserted.[FK_USERS] from inserted)
+GO
+
+IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_USER_SCORE_DELETED'  AND sc.name=N'dbo')
+ALTER TABLE [dbo].[POSTS] DROP CONSTRAINT [POST_USER_SCORE_DELETED]
+ GO
+
+CREATE TRIGGER POST_USER_SCORE_DELETED
+ON [POSTS]
+AFTER DELETE
+AS
+UPDATE [USERS]
+SET SCORE -= (SELECT deleted.[SCORE] from deleted)
+WHERE [USERS].ID = (SELECT deleted.[FK_USERS] from deleted)
+GO
+
+IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_PROFILE_HATE_LEVELE'  AND sc.name=N'dbo')
+ALTER TABLE [dbo].[POSTS] DROP CONSTRAINT [POST_PROFILE_HATE_LEVEL]
+ GO
+
+CREATE TRIGGER POST_PROFILE_HATE_LEVEL
+ON [POSTS]
+AFTER INSERT, UPDATE
+AS
+DECLARE @LEVEL int;
+DECLARE @COUNT int;
+SELECT @COUNT = COUNT(*) FROM PROFILES as pr JOIN POSTS as po ON pr.ID = po.FK_PROFILES WHERE pr.ID = (SELECT inserted.FK_PROFILES from inserted)
+IF(@COUNT <= 5)
+	SET @LEVEL = 1;
+ELSE IF(@COUNT <= 10)
+	SET @LEVEL = 2;
+ELSE IF(@COUNT > 10)
+	SET @LEVEL = 3;
+UPDATE PROFILES
+SET FK_HATE_ID = @LEVEL
+WHERE [PROFILES].ID = (SELECT inserted.FK_PROFILES from inserted)
+GO
+
+IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_REPORT_COUNT_DELETE'  AND sc.name=N'dbo')
+ALTER TABLE [dbo].[POSTS] DROP CONSTRAINT [POST_REPORT_COUNT_DELETE]
+ GO
+
+CREATE TRIGGER POST_REPORT_COUNT_DELETE
+ON [POSTS]
+AFTER UPDATE
+AS
+IF(SELECT inserted.[REPORT_COUNT] from inserted) >= 10
+	DELETE FROM [POSTS] WHERE [POSTS].ID = (SELECT inserted.ID from inserted);
 GO
 
 -- Kommentar
@@ -314,6 +386,7 @@ CREATE TABLE
 (
    [ID] numeric(38, 0)  NOT NULL,
    [FK_POST] numeric(38, 0)  NOT NULL,
+   [FK_USER] numeric(38, 0)  NOT NULL,
    [TEXT] varchar(140) NOT NULL
 )
 GO
@@ -337,6 +410,21 @@ ALTER TABLE [dbo].[COMMENTS]
    ([FK_POST])
  REFERENCES 
    [dbo].[POSTS]     ([ID])
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+
+GO
+
+IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'COMMENT_USER_FK'  AND sc.name=N'dbo'  AND type in (N'F'))
+ALTER TABLE [dbo].[COMMENTS] DROP CONSTRAINT [COMMENT_USER_FK]
+ GO
+
+ALTER TABLE [dbo].[COMMENTS]
+ ADD CONSTRAINT [COMMENT_USER_FK]
+ FOREIGN KEY 
+   ([FK_USER])
+ REFERENCES 
+   [dbo].[USERS]     ([ID])
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 
@@ -440,7 +528,7 @@ CREATE TABLE
 (
    [ID] numeric(38, 0)  NOT NULL,
    [DATE] DATETIME  NOT NULL,
-   [USERS] varchar(50) NOT NULL,
+   [USER] varchar(50) NOT NULL,
    [AKTION] varchar(50) NOT NULL,
 )
 GO
@@ -533,6 +621,23 @@ ALTER TABLE [dbo].[POST_TAG]
    ([FK_TAG])
  REFERENCES 
    [dbo].[TAGS]     ([ID])
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+
+GO
+
+-- Profil Hate Level FK
+
+IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'PROFILES_HATE_LEVEL_FK'  AND sc.name=N'dbo'  AND type in (N'F'))
+ALTER TABLE [dbo].[PROFILES] DROP CONSTRAINT [PROFILES_HATE_LEVEL_FK]
+ GO
+
+ALTER TABLE [dbo].[PROFILES]
+ ADD CONSTRAINT [PROFILES_HATE_LEVEL_FK]
+ FOREIGN KEY 
+   ([FK_HATE_ID])
+ REFERENCES 
+   [dbo].[HATE_LVL]     ([ID])
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 
