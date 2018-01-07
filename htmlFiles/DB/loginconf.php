@@ -11,7 +11,7 @@ if (isset($_POST["Logout"]))
 	
 	$username = $_POST['Username'];
 	$password = $_POST['Password'];
-	$loginError = false; 
+ 
 if (isset($_POST["Login"]))  {
 	
 	if(isset($username) && isset($password)){
@@ -27,8 +27,6 @@ if (isset($_POST["Login"]))  {
 			$pwd = $row['password'];
 			if($pwd == md5($password)){
 				$_SESSION['Loggedin'] = $username;
-			}else{
-				$loginError = true; 
 			}
 		}
 		
