@@ -229,7 +229,7 @@ CREATE TABLE
    [ID] numeric(38, 0)  NOT NULL,
    [FK_PROFILES] numeric(38, 0)  NOT NULL,
    [FK_USERS] numeric(38, 0)  NOT NULL,
-   [PATH] varchar(50)  NOT NULL
+   [PATH] varchar(255)  NOT NULL
 )
 GO
 IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_PK' AND type in (N'PK'))
