@@ -22,6 +22,7 @@ body{
     height: 100%;
     height: -moz-available;
     height: -webkit-fill-available;
+	color: white;
 }
 .searchdiv{
     margin-top:15em;
