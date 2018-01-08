@@ -51,6 +51,7 @@ if (isset($_POST["searchTags"]))
                     <div class="form-group">
                         <div>
                             <button type="submit" name="send" class="btn btn-default">Add Comment</button>
+                            <button type="submit" name="report" class="btn btn-default"> Report post</button>
                         </div>
                     </div>
                 </form>

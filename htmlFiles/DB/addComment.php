@@ -3,7 +3,7 @@
 $servername = "(LocalDb)\MSSQLLocalDB";
 $connectionInfo = array("Database" => "SocialJustice");
 $connection = sqlsrv_connect($servername, $connectionInfo);
-if (isset($_GET["send"])) {
+if (isset($_GET["send"]) && !empty($_GET["com"])) {
     $text = $_GET["com"];
     $user = $_GET["user"];
 
@@ -20,6 +20,14 @@ if (isset($_GET["send"])) {
     $sql = "execute addComment " . $postID . ",$userId,'$text'";
     $sendSql = sqlsrv_query($connection, $sql);
 
+    header("Location: index.php");
+}
+
+if(isset($_GET["report"])){
+    $postID = $_GET["postID"];
+
+    $updateCounter = "execute uspUpdateCounter ". $postID;
+    $sendUpdateCounter = sqlsrv_query($connection, $updateCounter);
     header("Location: index.php");
 }
 ?>

@@ -54,7 +54,6 @@ if (isset($_POST["searchTwitterHandles"])) {
             echo $getRow['username'] . " said: " . $getRow['text'] . "<br>";
         }
         if (isset($_SESSION['Loggedin'])) { ?>
-
             <form class="form-horizontal" method="GET" action="addComment.php">
                 <div class="form-group">
                     <label for="comment">Add your comment</label>
@@ -68,6 +67,7 @@ if (isset($_POST["searchTwitterHandles"])) {
                 <div class="form-group">
                     <div>
                         <button type="submit" name="send" class="btn btn-default">Add Comment</button>
+                        <button type="submit" name="report" class="btn btn-default"> Report post</button>
                     </div>
                 </div>
             </form>
