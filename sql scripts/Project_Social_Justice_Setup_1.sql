@@ -283,6 +283,7 @@ ALTER TABLE [dbo].[POSTS]
 
 GO
 
+
 IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_USERS_SCORE'  AND sc.name=N'dbo')
 ALTER TABLE [dbo].[POSTS] DROP CONSTRAINT [POST_USERS_SCORE]
  GO
@@ -292,9 +293,13 @@ ON [POSTS]
 AFTER UPDATE
 AS
 UPDATE [USERS]
-SET SCORE += 1
-WHERE [USERS].ID = (SELECT inserted.[FK_USERS] from inserted)
+SET SCORE -= (SELECT deleted.SCORE FROM deleted)
+WHERE [USERS].ID = (SELECT inserted.[FK_USERS] from inserted);
+UPDATE [USERS]
+SET SCORE += (SELECT inserted.SCORE FROM inserted)
+WHERE [USERS].ID = (SELECT inserted.[FK_USERS] from inserted);
 GO
+
 
 IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'POST_USERS_SCORE_DELETED'  AND sc.name=N'dbo')
 ALTER TABLE [dbo].[POSTS] DROP CONSTRAINT [POST_USERS_SCORE_DELETED]
@@ -315,7 +320,7 @@ ALTER TABLE [dbo].[POSTS] DROP CONSTRAINT [POST_PROFILE_HATE_LEVEL]
 
 CREATE TRIGGER POST_PROFILE_HATE_LEVEL
 ON [POSTS]
-AFTER UPDATE
+AFTER INSERT, UPDATE
 AS
 DECLARE @LEVEL int;
 DECLARE @COUNT int;
