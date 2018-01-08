@@ -294,9 +294,10 @@ AFTER UPDATE
 AS
 UPDATE [USERS]
 SET SCORE -= (SELECT deleted.SCORE FROM deleted)
-WHERE [USERS].ID = (SELECT inserted.[FK_USERS] from inserted)
+WHERE [USERS].ID = (SELECT inserted.[FK_USERS] from inserted);
+UPDATE [USERS]
 SET SCORE += (SELECT inserted.SCORE FROM inserted)
-WHERE [USERS].ID = (SELECT inserted.[FK_USERS] from inserted)
+WHERE [USERS].ID = (SELECT inserted.[FK_USERS] from inserted);
 GO
 
 
@@ -394,11 +395,7 @@ CREATE TABLE
 (
    [ID] numeric(38, 0)  NOT NULL,
    [FK_POST] numeric(38, 0)  NOT NULL,
-<<<<<<< HEAD
-   [FK_USER] numeric(38, 0)  NOT NULL,
-=======
    [FK_USERS] numeric(38, 0)  NOT NULL,
->>>>>>> b9ade95a18f7a6552563e4f30ff50c2632d6fde8
    [TEXT] varchar(140) NOT NULL
 )
 GO
@@ -427,16 +424,6 @@ ALTER TABLE [dbo].[COMMENTS]
 
 GO
 
-<<<<<<< HEAD
-IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'COMMENT_USER_FK'  AND sc.name=N'dbo'  AND type in (N'F'))
-ALTER TABLE [dbo].[COMMENTS] DROP CONSTRAINT [COMMENT_USER_FK]
- GO
-
-ALTER TABLE [dbo].[COMMENTS]
- ADD CONSTRAINT [COMMENT_USER_FK]
- FOREIGN KEY 
-   ([FK_USER])
-=======
 IF EXISTS (SELECT * FROM sys.objects so JOIN sys.schemas sc ON so.schema_id = sc.schema_id WHERE so.name = N'COMMENT_USERS_FK'  AND sc.name=N'dbo'  AND type in (N'F'))
 ALTER TABLE [dbo].[COMMENTS] DROP CONSTRAINT [COMMENT_USERS_FK]
  GO
@@ -445,7 +432,6 @@ ALTER TABLE [dbo].[COMMENTS]
  ADD CONSTRAINT [COMMENT_USERS_FK]
  FOREIGN KEY 
    ([FK_USERS])
->>>>>>> b9ade95a18f7a6552563e4f30ff50c2632d6fde8
  REFERENCES 
    [dbo].[USERS]     ([ID])
     ON DELETE NO ACTION
