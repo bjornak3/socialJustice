@@ -121,4 +121,47 @@ insert into log
 values(@NewId,@timestamp, @username, @action);
 end 
 
-execute uspLogInfo '2016-12-01 12:32:00.000', 'bjorna', 'logout';
+
+select * from comments; 
+select * from getPostsByTag;
+insert into comments values (2, 5555, 2, 'haha');
+
+create procedure addComment
+@postId int, @userId int, @text varchar(255)
+as begin
+DECLARE @NewId int;
+SELECT @NewId = FLOOR(RAND()*(9999999-1000000)+1000000);
+insert into comments values(@NewId, @postId, @userId, @text); 
+end
+
+select * from users;
+
+alter procedure uspUpdateCounter
+@postID int
+as begin
+declare @reportCount int;
+select @reportCount = REPORT_COUNT from POSTS where ID = @postID;
+update POSTS set REPORT_COUNT = @reportCount+1 where ID = @postID; 
+end
+
+alter procedure uspAddNewPost 
+@path varchar(255), @twitterHandle varchar(255), @tag varchar(255)
+as begin
+DECLARE @NewId int;
+SELECT @NewId = FLOOR(RAND()*(9999999-1000000)+1000000);
+
+declare @profilID int; 
+select @profilID = ID from PROFILES where TWITTER_HANDLE = @twitterHandle;
+declare @tagID int; 
+select @tagID = TAGS.ID from TAGS where NAME = @tag;
+insert into posts values (@NewId, @profilID,0,@path, 0, 0);
+insert into POST_TAG values (@NewId, @tagID);
+end
+
+delete from tags where ID between 100 and 102
+select * from POST_TAG;
+
+
+alter table posts
+add constraint confirst unique (PATH)
+

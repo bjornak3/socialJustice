@@ -8,7 +8,9 @@
             <ul class="nav navbar-nav <?php if($_GET["section"] == "addnewprofile") echo "active" ?>">
                 <li><a href="index.php?section=addnewprofile">add new Hate-Profile</a></li>
             </ul>
-
+            <ul class="nav navbar-nav <?php if($_GET["section"] == "addnewpost") echo "active" ?>">
+                <li><a href="index.php?section=addnewpost">add new Hate-Post</a></li>
+            </ul>
             <?php
         }
         include ("login.php");

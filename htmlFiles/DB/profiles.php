@@ -31,7 +31,9 @@ if (isset($_POST["searchTwitterHandles"])) {
 
     $newStmt = sqlsrv_query($connection, $getPostsbyTwitterHandle);
 
+    ?>
 
+    <?php
     echo "<div> POSTS: </div>" . $getPostsbyTwitterhandle;
 
     while ($rows = sqlsrv_fetch_array($newStmt, SQLSRV_FETCH_ASSOC)) {

@@ -41,24 +41,29 @@
     $connection = sqlsrv_connect($servername, $connectionInfo);
 
     if(isset($_POST["createProfile"])){
-        $twitterHandle = $_POST["twitterHandle"];
-        $headers = get_headers("https://twitter.com/".$twitterHandle);
-        if(strpos($headers[0], '404') !== false ) {
-            echo "User does not exist";
+        if(empty($_POST["firstName"]) || empty($_POST["lastName"])|| empty($_POST["twitterHandle"]) || empty($_POST["job"])){
+            echo "Please fill in the data.";
+        }else {
+            $twitterHandle = $_POST["twitterHandle"];
+            $headers = get_headers("https://twitter.com/" . $twitterHandle);
+            if (strpos($headers[0], '404') !== false) {
+                echo "User does not exist";
 
-        } else {
-            $firstName = $_POST["firstName"];
-            $lastName = $_POST["lastName"];
-            $job = $_POST["job"];
-            $gender = $_POST["gender"];
-            $createProfile = "execute uspCreateProfile '".$twitterHandle."','". $firstName ."','".$lastName ."','".$gender."','".$job."'";
-            $sendCreateProfile = sqlsrv_query($connection, $createProfile);
+            } else {
+                $firstName = $_POST["firstName"];
+                $lastName = $_POST["lastName"];
+                $job = $_POST["job"];
+                $gender = $_POST["gender"];
+                $createProfile = "execute uspCreateProfile '" . $twitterHandle . "','" . $firstName . "','" . $lastName . "','" . $gender . "','" . $job . "'";
+                $sendCreateProfile = sqlsrv_query($connection, $createProfile);
 
-            if(!$sendCreateProfile){
-                echo "User already inserted.";
+                if (!$sendCreateProfile) {
+                    echo "Profile already inserted.";
+                }else{
+                    echo "Profile successfully inserted.";
+                }
             }
         }
-
 
     }
 ?>

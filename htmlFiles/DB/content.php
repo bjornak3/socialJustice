@@ -29,6 +29,14 @@
             } else {
                 include("notloggedin.php");
             }
+            break;
+        case 'addnewpost':
+            if (isset($_SESSION["Loggedin"])) {
+                include("addnewpost.php");
+                break;
+            } else {
+                include("notloggedin.php");
+            }
     }
 ?>
 </div>
